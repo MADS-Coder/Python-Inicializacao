@@ -5,7 +5,7 @@ from turtle import *
 speed(5)
 shape("turtle")
 
-for count in range(370):
+for count in range(360):
     forward(1)
     left(1)
 
