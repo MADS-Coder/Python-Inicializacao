@@ -1,10 +1,9 @@
 from operator import itemgetter
 
-
 def carregar(arquivo):
     linhas = []
     with open(arquivo) as f:
-        f.readline()  # Descarta a primeira linha (cabeçalho do arquivo)
+        f.readline()
         for linha in f.readlines():
             data, abertura, alta, baixa, fechamento, volume = linha.strip().split(',')
             ano, mes, dia = data.split('-')
@@ -32,34 +31,17 @@ def formatar_data(linha):
     return f'{d:0>2d} de {meses[m - 1]} de {a}'
 
 
-def maior_volume(empresa):
-    ordenado = sorted(empresa, key=itemgetter('alta'))
-    return ordenado[-1]['alta'], formatar_data(ordenado[-1])
-
-
-def periodo_inicio(empresa):
-    ordenado = sorted(empresa, key=itemgetter('ano', 'mes', 'dia'))
-    return formatar_data(ordenado[0])
-
-
-def periodo_final(empresa):
-    ordenado = sorted(empresa, key=itemgetter('ano', 'mes', 'dia'), reverse=True)
-    return formatar_data(ordenado[0])
-
-
-def media_fechamento(empresa):
-    return sum(valor['fechamento'] for valor in empresa) / len(empresa)
+def maior_abertura(empresa):
+    ordenado = sorted(empresa, key=itemgetter('abertura'))
+    return ordenado[-1]['abertura'], formatar_data(ordenado[-1])
 
 
 def main():
-    n = input('Nome do arquivo com a extensão (exemplo: daily_ABEV3.SA.csv): ')
-
     # Carregar os dados da empresa a partir do arquivo csv
-    nome = carregar(n)
-
-    # Qual o maior volume diário negociado e em que data ocorreu.
-    alta, data = maior_volume(nome)
-    print(f'O maior preço na abertura foi {alta:.2f} em {data}')
+    a_carregar = input("Nome do arquivo (por exemplo: 'daily_ABEV3.SA.csv'): ")
+    abev3 = carregar(a_carregar)
+    abertura, data = maior_abertura(abev3)
+    print(f'O maior preço na abertura foi {abertura:.2f} em {data}')
 
 
 if __name__ == '__main__':

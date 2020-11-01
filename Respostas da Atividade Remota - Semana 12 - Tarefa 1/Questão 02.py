@@ -32,39 +32,17 @@ def formatar_data(linha):
     return f'{d:0>2d} de {meses[m - 1]} de {a}'
 
 
-def maior_volume(empresa):
-    ordenado = sorted(empresa, key=itemgetter('volume'))
-    return ordenado[-1]['volume'], formatar_data(ordenado[-1])
-
-
 def menor_volume(empresa):
-    ordenado = sorted(empresa, key=itemgetter('baixa'))
-    return ordenado[0]['baixa'], formatar_data(ordenado[0])
-
-
-def periodo_inicio(empresa):
-    ordenado = sorted(empresa, key=itemgetter('ano', 'mes', 'dia'))
-    return formatar_data(ordenado[0])
-
-
-def periodo_final(empresa):
-    ordenado = sorted(empresa, key=itemgetter('ano', 'mes', 'dia'), reverse=True)
-    return formatar_data(ordenado[0])
-
-
-def media_fechamento(empresa):
-    return sum(valor['fechamento'] for valor in empresa) / len(empresa)
+    ordenado = sorted(empresa, key=itemgetter('fechamento'))
+    return ordenado[0]['fechamento'], formatar_data(ordenado[0])
 
 
 def main():
-    n = input('Nome do arquivo com a extensão (exemplo: daily_ABEV3.SA.csv): ')
-
     # Carregar os dados da empresa a partir do arquivo csv
-    nome = carregar(n)
-
-    # Qual o maior volume diário negociado e em que data ocorreu.
-    baixa, data = menor_volume(nome)
-    print(f'O menor preço no fechamento foi {baixa:.2f} em {data}')
+    nome = input("Nome do arquivo (por exemplo: 'daily_ABEV3.SA.csv'): ")
+    dados = carregar(nome)
+    fechamento, data = menor_volume(dados)
+    print(f'O menor preço no fechamento foi {fechamento:.2f} em {data}')
 
 
 if __name__ == '__main__':

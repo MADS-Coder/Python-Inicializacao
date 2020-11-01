@@ -32,16 +32,6 @@ def formatar_data(linha):
     return f'{d:0>2d} de {meses[m - 1]} de {a}'
 
 
-def maior_volume(empresa):
-    ordenado = sorted(empresa, key=itemgetter('volume'))
-    return ordenado[-1]['volume'], formatar_data(ordenado[-1])
-
-
-def menor_volume(empresa):
-    ordenado = sorted(empresa, key=itemgetter('baixa'))
-    return ordenado[0]['baixa'], formatar_data(ordenado[0])
-
-
 def periodo_inicio(empresa):
     ordenado = sorted(empresa, key=itemgetter('ano', 'mes', 'dia'))
     return formatar_data(ordenado[0])
@@ -54,26 +44,24 @@ def periodo_final(empresa):
 
 # Realiza o preço médio do arquivo de acordo com o mês e o ano informado.
 def media_fechamento(empresa):
-    mes = int(input('Mês: '))
-    ano = int(input('Ano: '))
+    mes = int(input("Mês que deseja saber a média: "))
+    ano = int(input("Ano que deseja saber a média: "))
     print(f'Dias de {mes}/{ano} que houve queda no preço da ação:')
-    ordenado = sorted(empresa, key=itemgetter('ano', 'mes', 'dia'), reverse=True)
+    ordenado = sorted(empresa, key=itemgetter('ano', 'mes', 'dia'))
     for p in ordenado:
         if p['mes'] == mes:
             if p['ano'] == ano:
                 if p['abertura'] > p['fechamento']:
                     d = p['dia']
-                    v = p['abertura'] - p['fechamento']
-                    print(f"('{p['dia']:02d}/{p['mes']}/{p['ano']}', {p['abertura']}, {p['fechamento']}, {v:.2f})")
+                    v = round(p['abertura'] - p['fechamento'], 3)
+                    print(f"('{p['dia']:02d}/{p['mes']:02d}/{p['ano']}', {p['abertura']}, {p['fechamento']}, {v})")
 
 
 def main():
-    n = input('Nome do arquivo com a extensão (exemplo: daily_ABEV3.SA.csv): ')
     # Carregar os dados da empresa a partir do arquivo csv
-    nome = carregar(n)
-
-    # Qual o maior volume diário negociado e em que data ocorreu.
-    media_fechamento(nome)
+    nome = input("Nome do arquivo (por exemplo: 'daily_ABEV3.SA.csv'): ").strip()
+    dado = carregar(nome)
+    media_fechamento(dado)
 
 
 if __name__ == '__main__':
